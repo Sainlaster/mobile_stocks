@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<item android:id="@+id/quotes"
+    android:icon="@drawable/baseline_analytics_24"
+    android:title="quotes"
+    android:orderInCategory="1"/>
+    <item android:id="@+id/portfolio"
+        android:icon="@drawable/baseline_analytics_24"
+        android:title="portfolio"
+        android:orderInCategory="2"/>
+    <item android:id="@+id/setting"
+        android:icon="@drawable/baseline_analytics_24"
+        android:title="setting"
+        android:orderInCategory="3"/>
+</menu>
