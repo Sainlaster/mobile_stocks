@@ -11,6 +11,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         bindingC=ActivityMainBinding.inflate(layoutInflater)
         setContentView(bindingC.root)
-        supportFragmentManager.beginTransaction().replace(R.id.fragmentPlace,StockFragment()).commit()
+
+        bindingC.bMenu.setOnItemSelectedListener {
+            when (it.itemId ){
+                R.id.quotes->{supportFragmentManager.beginTransaction().replace(R.id.fragmentPlace,StockFragment()).commit()}
+                R.id.portfolio->{supportFragmentManager.beginTransaction().replace(R.id.fragmentPlace,PortfolioFragment()).commit()}
+            }
+            true
+        }
+    }
+    fun OnNavButtonClick(){
     }
 }

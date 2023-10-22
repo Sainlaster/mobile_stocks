@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Mobile</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="stock_fragment_quotes">Котировки</string>
+    <string name="stock_fragment_index">Индексы</string>
+    <string name="stock_fragment_all_quotes">Все акции</string>
 </resources>
