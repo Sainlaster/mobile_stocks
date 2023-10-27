@@ -8,11 +8,12 @@ import androidx.core.graphics.drawable.toDrawable
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mobile.databinding.StockItemBinding
 
-class StockAdapter:RecyclerView.Adapter<StockAdapter.StockHolder>() {
+class StockAdapter(val listener: Listener):RecyclerView.Adapter<StockAdapter.StockHolder>() {
     val  stockList=ArrayList<Stock>()
+    lateinit var parent_act:ViewGroup
     class StockHolder(item: View):RecyclerView.ViewHolder(item) {
         val binding = StockItemBinding.bind(item)
-            fun bind(stock: Stock) {
+            fun bind(stock: Stock,listener: Listener) {
                 binding.name.text = stock.name
                 binding.image.setImageDrawable(stock.imageURL.toDrawable())
                 binding.change.text = stock.change
@@ -20,6 +21,9 @@ class StockAdapter:RecyclerView.Adapter<StockAdapter.StockHolder>() {
                 binding.platform.text = stock.platform
                 binding.changePercent.text = stock.changePercent
                 binding.ticket.text = stock.ticket
+                binding.stockCard.setOnClickListener{
+                    listener.onClick(stock)
+                }
             }
     }
 
@@ -28,7 +32,7 @@ class StockAdapter:RecyclerView.Adapter<StockAdapter.StockHolder>() {
         return StockHolder(view)
     }
     override fun onBindViewHolder(holder: StockHolder, position: Int) {
-        holder.bind(stockList[position])
+        holder.bind(stockList[position], listener)
     }
     override fun getItemCount(): Int {
         return stockList.size
@@ -38,5 +42,8 @@ class StockAdapter:RecyclerView.Adapter<StockAdapter.StockHolder>() {
         stockList.add(stock)
         notifyDataSetChanged()
 
+    }
+    interface Listener{
+        fun onClick(stock:Stock)
     }
 }
