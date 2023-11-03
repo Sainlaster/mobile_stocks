@@ -62,4 +62,13 @@ object RetrofitInterface {
     val stockByIdApi: StockIdService by lazy {
         retrofit.create(StockIdService::class.java)
     }
+    val signInApi: SignInService by lazy {
+        retrofit.create(SignInService::class.java)
+    }
+    val stockMyApi: PortfolioStockService by lazy {
+        retrofit.create(PortfolioStockService::class.java)
+    }
+    val stockBuy: BuyStockService by lazy{
+        retrofit.create(BuyStockService::class.java)
+    }
 }

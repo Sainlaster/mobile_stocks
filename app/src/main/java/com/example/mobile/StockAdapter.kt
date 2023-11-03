@@ -24,7 +24,7 @@ class StockAdapter(val listener: Listener):RecyclerView.Adapter<StockAdapter.Sto
                 binding.stockCard.setOnClickListener{
                     listener.onClick(stock)
                 }
-            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StockHolder {

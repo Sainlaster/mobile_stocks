@@ -15,6 +15,7 @@ import com.example.mobile.databinding.ActivityMainBinding
 import com.example.mobile.databinding.FragmentStockBinding
 import com.example.mobile.model.ResponseStockDto
 import com.example.mobile.repository.StockServiceRepository
+import com.example.mobile.uservariables.UserVariables
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -49,7 +50,8 @@ class StockFragment : Fragment(), StockAdapter.Listener {
         // adapter instance is set to the
         // recyclerview to inflate the items.
         recyclerView.adapter = adapter
-        val call = stockServiceRepository.getAllStock("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTg0ODkxNDksInVzZXJfaWQiOiI5MzY5YmYxZC0wMTEyLTRjMDktOWI5NC0xM2M4ODM1YzU0ZmYifQ.v6RmuLxHrBQvOALfBJJrmCKqgwPY5lS5SdA3swSmOqo")
+        Log.i("MyLog",UserVariables.token);
+        val call = stockServiceRepository.getAllStock(UserVariables.token)
         call.enqueue(
             object : Callback<ResponseStockDto> {
                 override fun onResponse(
@@ -60,7 +62,7 @@ class StockFragment : Fragment(), StockAdapter.Listener {
                     if (responseAnswer != null) {
                         for(item in responseAnswer.items){
                             val stock =
-                                Stock(item.id,R.drawable.baseline_analytics_24, item.price, "123", item.about_company, item.ticket, "asd", "sad")
+                                Stock(item.id,R.drawable.baseline_analytics_24, item.price, "123", item.name, item.ticket, "asd", "sad")
                             adapter.addStock(stock)
                         }
                     }
@@ -70,12 +72,10 @@ class StockFragment : Fragment(), StockAdapter.Listener {
                     };
                 }
                 override fun onFailure(call: Call<ResponseStockDto>, t: Throwable) {
-                    Log.i("LOGer", t.stackTraceToString())
+                    Log.i("MyLog", t.stackTraceToString())
                 }
             }
         )
-
-
     }
 
     override fun onClick(stock: Stock) {

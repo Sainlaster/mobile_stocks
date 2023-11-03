@@ -1,39 +1,68 @@
 package com.example.mobile
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mobile.databinding.ActivityStockBinding
+import com.example.mobile.model.ResponseBuy
 import com.example.mobile.model.StockDto
 import com.example.mobile.repository.StockServiceRepository
+import com.example.mobile.uservariables.UserVariables
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-
-
 class StockActivity : AppCompatActivity() {
     private val stockServiceRepository: StockServiceRepository = StockServiceRepository()
     lateinit var bindingSt:ActivityStockBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         val arguments = intent.extras
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_stock)
         bindingSt=ActivityStockBinding.inflate(layoutInflater)
+        setContentView(bindingSt.root)
 
         val id= arguments?.getString("id")
-        Log.i("LOGer",id.toString())
-        val call = stockServiceRepository.getStockById(id.toString(),"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTg0ODkxNDksInVzZXJfaWQiOiI5MzY5YmYxZC0wMTEyLTRjMDktOWI5NC0xM2M4ODM1YzU0ZmYifQ.v6RmuLxHrBQvOALfBJJrmCKqgwPY5lS5SdA3swSmOqo")
+        Log.i("MyLog",id.toString())
+        val call = stockServiceRepository.getStockById(id.toString(),UserVariables.token)
         call.enqueue(
             object : Callback<StockDto> {
                 override fun onResponse(
                     call: Call<StockDto>,
                     response: Response<StockDto>
                 ) {
-
                     val responseAnswer: StockDto?=response.body()
                     if (responseAnswer != null) {
-                           Log.i("MyLog",responseAnswer.toString())
+                        Log.i("MyLog",responseAnswer.toString())
+                        bindingSt.activitystockname.text=responseAnswer.name
+                        bindingSt.activityStockTicket.text=responseAnswer.ticket
+                        bindingSt.activityStockPrice.text=responseAnswer.price
+                        bindingSt.ishort.text=responseAnswer.is_short
+                        bindingSt.step.text=responseAnswer.price_step
+                        bindingSt.lotsize.text=responseAnswer.lot_size
+                        bindingSt.activityStockButtonBuy.setOnClickListener{
+                            val call = stockServiceRepository.postBuyStock(UserVariables.token,1,responseAnswer.ticket)
+                            call.enqueue(
+                                object : Callback<ResponseBuy> {
+                                    override fun onResponse(
+                                        call: Call<ResponseBuy>,
+                                        response: Response<ResponseBuy>
+                                    ) {
+                                        val responseAnswer: ResponseBuy?=response.body()
+                                        if (responseAnswer != null) {
+                                            Log.i("MyLog",responseAnswer.toString())
+                                        }
+                                        else
+                                        {
+                                            Log.i("MyLog",call.request().toString())
+                                            Log.i("MyLog",response.message().toString())
+                                            Log.i("MyLog",response.code().toString())
+                                        };
+                                    }
+                                    override fun onFailure(call: Call<ResponseBuy>, t: Throwable) {
+                                        Log.i("MyLog", t.stackTraceToString())
+                                    }
+                                }
+                            )
+                        }
                     }
                     else
                     {
@@ -43,10 +72,10 @@ class StockActivity : AppCompatActivity() {
                     };
                 }
                 override fun onFailure(call: Call<StockDto>, t: Throwable) {
-                    Log.i("LOGer", t.stackTraceToString())
+                    Log.i("MyLog", t.stackTraceToString())
                 }
             }
         )
-
     }
+
 }

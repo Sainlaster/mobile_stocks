@@ -1,14 +1,13 @@
 package com.example.mobile.model
 
 data class StockDto(
+    var graphic_function:String,
     var id:String,
-    var ticket:String,
-    var name:String,
-    var about_company:String,
-    var price:String,
-    var lotSize:String,
-    var priceStep:String,
-    var isShort:String,
+    var is_short:String,
     var logo:String,
-    var graphic_function:String
+    var lot_size:String,
+    var name:String,
+    var price:String,
+    var price_step:String,
+    var ticket:String
 )

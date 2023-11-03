@@ -1,6 +1,7 @@
 package com.example.mobile.api
 
 import com.example.mobile.model.ResponseStockDto
+import com.example.mobile.model.ResponseStockId
 import com.example.mobile.model.StockDto
 import retrofit2.Call
 import retrofit2.http.GET
