@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -69,10 +70,18 @@ class StockFragment : Fragment(), StockAdapter.Listener {
                     else
                     {
                         Log.i("MyLog","ASDASD");
+                        val message = "Произошла ошибка, мы все исправляем, пожалуйста, подождите"
+                        val duration = Toast.LENGTH_LONG // или Toast.LENGTH_LONG
+                        val toast = Toast.makeText(requireContext(), message, duration)
+                        toast.show()
                     };
                 }
                 override fun onFailure(call: Call<ResponseStockDto>, t: Throwable) {
                     Log.i("MyLog", t.stackTraceToString())
+                    val message = "Произошла ошибка, мы все исправляем, пожалуйста, подождите"
+                    val duration = Toast.LENGTH_LONG // или Toast.LENGTH_LONG
+                    val toast = Toast.makeText(requireContext(), message, duration)
+                    toast.show()
                 }
             }
         )

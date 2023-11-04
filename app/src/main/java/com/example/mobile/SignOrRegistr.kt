@@ -20,7 +20,7 @@ class SignOrRegistr : AppCompatActivity() {
         startActivity(intent);
     }
     fun regOnClick(view :View){
-        var intent = Intent(this, Registr::class.java)
+        var intent = Intent(this, RegisterActivity::class.java)
         startActivity(intent);
     }
 }

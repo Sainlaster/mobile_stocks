@@ -2,6 +2,7 @@ package com.example.mobile
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mobile.databinding.ActivityStockBinding
 import com.example.mobile.model.ResponseBuy
@@ -49,16 +50,30 @@ class StockActivity : AppCompatActivity() {
                                         val responseAnswer: ResponseBuy?=response.body()
                                         if (responseAnswer != null) {
                                             Log.i("MyLog",responseAnswer.toString())
+                                            val message = "Успешная покупка!"
+                                            val duration = Toast.LENGTH_LONG // или Toast.LENGTH_LONG
+                                            val toast = Toast.makeText(applicationContext, message, duration)
+                                            toast.show()
                                         }
                                         else
                                         {
                                             Log.i("MyLog",call.request().toString())
                                             Log.i("MyLog",response.message().toString())
                                             Log.i("MyLog",response.code().toString())
+                                            if(response.code()!=200){
+                                                val message = "Не удалось совершить покупку"
+                                                val duration = Toast.LENGTH_LONG // или Toast.LENGTH_LONG
+                                                val toast = Toast.makeText(applicationContext, message, duration)
+                                                toast.show()
+                                            }
                                         };
                                     }
                                     override fun onFailure(call: Call<ResponseBuy>, t: Throwable) {
                                         Log.i("MyLog", t.stackTraceToString())
+                                        val message = "Не удалось совершить покупку, пожалуйста, попробуйте позже"
+                                        val duration = Toast.LENGTH_LONG // или Toast.LENGTH_LONG
+                                        val toast = Toast.makeText(applicationContext, message, duration)
+                                        toast.show()
                                     }
                                 }
                             )

@@ -7,8 +7,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mobile.model.ResponsUserInfo
 import com.example.mobile.model.ResponseStockDto
 import com.example.mobile.repository.StockServiceRepository
 import com.example.mobile.uservariables.UserVariables
@@ -35,8 +38,6 @@ class PortfolioFragment : Fragment(), StockAdapter.Listener {
         super.onViewCreated(view, savedInstanceState)
         val recyclerView: RecyclerView = view.findViewById(R.id.rvStockMy)
         recyclerView.layoutManager = GridLayoutManager(context, 1)
-        // adapter instance is set to the
-        // recyclerview to inflate the items.
         recyclerView.adapter = adapter
         Log.i("MyLog", UserVariables.token);
         val call = stockServiceRepository.getMyStock(UserVariables.token)
@@ -57,10 +58,52 @@ class PortfolioFragment : Fragment(), StockAdapter.Listener {
                     else
                     {
                         Log.i("MyLog","ASDASD");
+                        val message = "Произошла ошибка, мы все исправляем, пожалуйста, подождите"
+                        val duration = Toast.LENGTH_LONG // или Toast.LENGTH_LONG
+                        val toast = Toast.makeText(requireContext(), message, duration)
+                        toast.show()
                     };
                 }
                 override fun onFailure(call: Call<ResponseStockDto>, t: Throwable) {
                     Log.i("MyLog", t.stackTraceToString())
+                    val message = "Произошла ошибка, мы все исправляем, пожалуйста, подождите"
+                    val duration = Toast.LENGTH_LONG // или Toast.LENGTH_LONG
+                    val toast = Toast.makeText(requireContext(), message, duration)
+                    toast.show()
+                }
+            }
+        )
+        val callUser = stockServiceRepository.getUserInfo(UserVariables.token)
+        callUser.enqueue(
+            object : Callback<ResponsUserInfo> {
+                override fun onResponse(
+                    call: Call<ResponsUserInfo>,
+                    response: Response<ResponsUserInfo>
+                ) {
+                    val responseAnswer: ResponsUserInfo?=response.body()
+                    if (responseAnswer != null) {
+                        Log.i("MyLog",responseAnswer.toString());
+                        val b= view.findViewById<TextView>(R.id.userBalance)
+                        b.text=responseAnswer.user_info.balance.toString()+"$"
+                    }
+                    else
+                    {
+                        if(response.code()!=200) {
+                            Log.i("MyLog", "ASDASD");
+                            val message =
+                                "Произошла ошибка, мы все исправляем, пожалуйста, подождите"
+                            val duration = Toast.LENGTH_LONG
+                            val toast = Toast.makeText(requireContext(), message, duration)
+                            toast.show()
+                        }
+                    };
+                }
+                override fun onFailure(call: Call<ResponsUserInfo>, t: Throwable) {
+                    Log.i("MyLog", t.stackTraceToString())
+                    val message = "Произошла ошибка, мы все исправляем, пожалуйста, подождите"
+                    val duration = Toast.LENGTH_LONG
+                    val toast = Toast.makeText(requireContext(), message, duration)
+                    toast.show()
                 }
             }
         )

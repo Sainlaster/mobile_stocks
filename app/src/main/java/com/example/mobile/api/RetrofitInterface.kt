@@ -71,4 +71,10 @@ object RetrofitInterface {
     val stockBuy: BuyStockService by lazy{
         retrofit.create(BuyStockService::class.java)
     }
+    val userInfo:UserInfoService by lazy {
+        retrofit.create(UserInfoService::class.java)
+    }
+    val registerUser:RegisterService by lazy {
+        retrofit.create(RegisterService::class.java)
+    }
 }

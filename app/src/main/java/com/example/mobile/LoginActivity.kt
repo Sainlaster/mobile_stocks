@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.EditText
+import android.widget.Toast
 import com.example.mobile.databinding.ActivityLoginBinding
 import com.example.mobile.databinding.ActivityMainBinding
 import com.example.mobile.model.SignInToken
@@ -49,10 +50,20 @@ class LoginActivity : AppCompatActivity() {
                         Log.i("MyLog",call.request().toString())
                         Log.i("MyLog",response.message().toString())
                         Log.i("MyLog",response.code().toString())
+                        if(response.code()!=200){
+                            val message = "Произошла ошибка, мы все исправляем, пожалуйста, подождите"
+                            val duration = Toast.LENGTH_LONG // или Toast.LENGTH_LONG
+                            val toast = Toast.makeText(applicationContext, message, duration)
+                            toast.show()
+                        }
                     };
                 }
                 override fun onFailure(call: Call<SignInToken>, t: Throwable) {
                     Log.i("MyLog", t.stackTraceToString())
+                    val message = "Произошла ошибка, мы все исправляем, пожалуйста, подождите"
+                    val duration = Toast.LENGTH_LONG // или Toast.LENGTH_LONG
+                    val toast = Toast.makeText(applicationContext, message, duration)
+                    toast.show()
                 }
             }
         )

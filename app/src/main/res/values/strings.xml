@@ -3,5 +3,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="stock_fragment_quotes">Котировки</string>
     <string name="stock_fragment_index">Индексы</string>
+    <string name="user_balance_view">Ваш баланс</string>
     <string name="stock_fragment_all_quotes">Все акции</string>
+    <string name="user_stock">Ваши акции</string>
 </resources>
