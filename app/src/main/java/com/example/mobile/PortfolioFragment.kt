@@ -51,7 +51,7 @@ class PortfolioFragment : Fragment(), StockAdapter.Listener {
                     if (responseAnswer != null) {
                         for(item in responseAnswer.items){
                             val stock =
-                                Stock(item.id,R.drawable.baseline_analytics_24, item.price, "123", item.name, item.ticket, "asd", "sad")
+                                Stock(item.id,item.logo, item.price, "NASDAQ", item.name, item.ticket, "0", "0")
                             adapter.addStock(stock)
                         }
                     }

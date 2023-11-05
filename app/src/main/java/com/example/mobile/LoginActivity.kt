@@ -50,12 +50,20 @@ class LoginActivity : AppCompatActivity() {
                         Log.i("MyLog",call.request().toString())
                         Log.i("MyLog",response.message().toString())
                         Log.i("MyLog",response.code().toString())
+                        if(response.code()==401){
+                            val message = "Неверный логин или пороль"
+                            val duration = Toast.LENGTH_LONG // или Toast.LENGTH_LONG
+                            val toast = Toast.makeText(applicationContext, message, duration)
+                            toast.show()
+                            return
+                        }
                         if(response.code()!=200){
                             val message = "Произошла ошибка, мы все исправляем, пожалуйста, подождите"
                             val duration = Toast.LENGTH_LONG // или Toast.LENGTH_LONG
                             val toast = Toast.makeText(applicationContext, message, duration)
                             toast.show()
                         }
+
                     };
                 }
                 override fun onFailure(call: Call<SignInToken>, t: Throwable) {

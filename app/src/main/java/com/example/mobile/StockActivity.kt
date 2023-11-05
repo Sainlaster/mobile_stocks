@@ -1,10 +1,15 @@
 package com.example.mobile
 
+import android.app.AlertDialog
 import android.graphics.Color
 import android.os.Bundle
+import android.text.InputType
 import android.util.Log
+import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import coil.decode.SvgDecoder
+import coil.load
 import com.example.mobile.databinding.ActivityStockBinding
 import com.example.mobile.model.ResponseBuy
 import com.example.mobile.model.ResponsePolynom
@@ -25,6 +30,7 @@ import com.github.mikephil.charting.data.LineDataSet
 class StockActivity : AppCompatActivity() {
     private val stockServiceRepository: StockServiceRepository = StockServiceRepository()
     lateinit var bindingSt:ActivityStockBinding
+    lateinit var rTicket:String
     override fun onCreate(savedInstanceState: Bundle?) {
         val arguments = intent.extras
         super.onCreate(savedInstanceState)
@@ -49,83 +55,18 @@ class StockActivity : AppCompatActivity() {
                         bindingSt.ishort.text=responseAnswer.is_short
                         bindingSt.step.text=responseAnswer.price_step
                         bindingSt.lotsize.text=responseAnswer.lot_size
+                        rTicket=responseAnswer.ticket
+                        val onlineSvgImage = bindingSt.activityStockPreview
+                        val svgUrl = responseAnswer.logo
+                        onlineSvgImage.load(svgUrl) {
+                            decoderFactory { result, options, _ -> SvgDecoder(result.source, options) }
+                        }
                         bindingSt.activityStockButtonBuy.setOnClickListener{
-                            val call = stockServiceRepository.postBuyStock(UserVariables.token,1,responseAnswer.ticket)
-                            call.enqueue(
-                                object : Callback<ResponseBuy> {
-                                    override fun onResponse(
-                                        call: Call<ResponseBuy>,
-                                        response: Response<ResponseBuy>
-                                    ) {
-                                        val responseAnswer: ResponseBuy?=response.body()
-                                        if (responseAnswer != null) {
-                                            Log.i("MyLog",responseAnswer.toString())
-                                            val message = "Успешная покупка!"
-                                            val duration = Toast.LENGTH_LONG // или Toast.LENGTH_LONG
-                                            val toast = Toast.makeText(applicationContext, message, duration)
-                                            toast.show()
-                                        }
-                                        else
-                                        {
-                                            Log.i("MyLog",call.request().toString())
-                                            Log.i("MyLog",response.message().toString())
-                                            Log.i("MyLog",response.code().toString())
-                                            if(response.code()!=200){
-                                                val message = "Не удалось совершить покупку"
-                                                val duration = Toast.LENGTH_LONG // или Toast.LENGTH_LONG
-                                                val toast = Toast.makeText(applicationContext, message, duration)
-                                                toast.show()
-                                            }
-                                        };
-                                    }
-                                    override fun onFailure(call: Call<ResponseBuy>, t: Throwable) {
-                                        Log.i("MyLog", t.stackTraceToString())
-                                        val message = "Не удалось совершить покупку, пожалуйста, попробуйте позже"
-                                        val duration = Toast.LENGTH_LONG // или Toast.LENGTH_LONG
-                                        val toast = Toast.makeText(applicationContext, message, duration)
-                                        toast.show()
-                                    }
-                                }
-                            )
+                            showBuyDialog()
+
                         }
                         bindingSt.activityStockButtonSell.setOnClickListener{
-                            val calls = stockServiceRepository.deleteSellStock(UserVariables.token,1,responseAnswer.ticket)
-                            calls.enqueue(
-                                object : Callback<ResponseSell> {
-                                    override fun onResponse(
-                                        call: Call<ResponseSell>,
-                                        response: Response<ResponseSell>
-                                    ) {
-                                        val responseAnswer: ResponseSell?=response.body()
-                                        if (responseAnswer != null) {
-                                            Log.i("MyLog",responseAnswer.toString())
-                                            val message = "Успешная продажа!"
-                                            val duration = Toast.LENGTH_LONG // или Toast.LENGTH_LONG
-                                            val toast = Toast.makeText(applicationContext, message, duration)
-                                            toast.show()
-                                        }
-                                        else
-                                        {
-                                            Log.i("MyLog",call.request().toString())
-                                            Log.i("MyLog",response.message().toString())
-                                            Log.i("MyLog",response.code().toString())
-                                            if(response.code()!=200){
-                                                val message = "Не удалось совершить продажу"
-                                                val duration = Toast.LENGTH_LONG // или Toast.LENGTH_LONG
-                                                val toast = Toast.makeText(applicationContext, message, duration)
-                                                toast.show()
-                                            }
-                                        };
-                                    }
-                                    override fun onFailure(call: Call<ResponseSell>, t: Throwable) {
-                                        Log.i("MyLog", t.stackTraceToString())
-                                        val message = "Не удалось совершить покупку, пожалуйста, попробуйте позже"
-                                        val duration = Toast.LENGTH_LONG // или Toast.LENGTH_LONG
-                                        val toast = Toast.makeText(applicationContext, message, duration)
-                                        toast.show()
-                                    }
-                                }
-                            )
+                            showSellDialog()
                         }
 
 
@@ -205,6 +146,7 @@ class StockActivity : AppCompatActivity() {
 
                         // Обновление графика
                         lineChart.invalidate()
+
                     }
                     else
                     {
@@ -219,5 +161,112 @@ class StockActivity : AppCompatActivity() {
             }
         )
     }
+    private fun showBuyDialog() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Покупка акций")
+        val input = EditText(this)
+        input.inputType = InputType.TYPE_CLASS_NUMBER
+        builder.setView(input)
+        builder.setPositiveButton("Купить") { dialog, which ->
+            val quantity = input.text.toString()
+            val call = stockServiceRepository.postBuyStock(UserVariables.token,input.text.toString().toInt(),rTicket)
+            call.enqueue(
+                object : Callback<ResponseBuy> {
+                    override fun onResponse(
+                        call: Call<ResponseBuy>,
+                        response: Response<ResponseBuy>
+                    ) {
+                        val responseAnswer: ResponseBuy?=response.body()
+                        if (responseAnswer != null) {
+                            Log.i("MyLog",responseAnswer.toString())
+                            val message = "Успешная покупка!"
+                            val duration = Toast.LENGTH_LONG // или Toast.LENGTH_LONG
+                            val toast = Toast.makeText(applicationContext, message, duration)
+                            toast.show()
+                        }
+                        else
+                        {
+                            Log.i("MyLog",call.request().toString())
+                            Log.i("MyLog",response.message().toString())
+                            Log.i("MyLog",response.code().toString())
+                            if(response.code()!=200){
+                                val message = "Не удалось совершить покупку"
+                                val duration = Toast.LENGTH_LONG // или Toast.LENGTH_LONG
+                                val toast = Toast.makeText(applicationContext, message, duration)
+                                toast.show()
+                            }
+                        };
+                    }
+                    override fun onFailure(call: Call<ResponseBuy>, t: Throwable) {
+                        Log.i("MyLog", t.stackTraceToString())
+                        val message = "Не удалось совершить покупку, пожалуйста, попробуйте позже"
+                        val duration = Toast.LENGTH_LONG // или Toast.LENGTH_LONG
+                        val toast = Toast.makeText(applicationContext, message, duration)
+                        toast.show()
+                    }
+                }
+            )
+        }
 
+        builder.setNegativeButton("Отмена") { dialog, which ->
+            dialog.cancel()
+        }
+
+        val dialog = builder.create()
+        dialog.show()
+    }
+    private fun showSellDialog() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Продажа акций")
+        val input = EditText(this)
+        input.inputType = InputType.TYPE_CLASS_NUMBER
+        builder.setView(input)
+        builder.setPositiveButton("Продать") { dialog, which ->
+            val quantity = input.text.toString()
+            val calls = stockServiceRepository.deleteSellStock(UserVariables.token,input.text.toString().toInt(),rTicket)
+            calls.enqueue(
+                object : Callback<ResponseSell> {
+                    override fun onResponse(
+                        call: Call<ResponseSell>,
+                        response: Response<ResponseSell>
+                    ) {
+                        val responseAnswer: ResponseSell?=response.body()
+                        if (responseAnswer != null) {
+                            Log.i("MyLog",responseAnswer.toString())
+                            val message = "Успешная продажа!"
+                            val duration = Toast.LENGTH_LONG // или Toast.LENGTH_LONG
+                            val toast = Toast.makeText(applicationContext, message, duration)
+                            toast.show()
+                        }
+                        else
+                        {
+                            Log.i("MyLog",call.request().toString())
+                            Log.i("MyLog",response.message().toString())
+                            Log.i("MyLog",response.code().toString())
+                            if(response.code()!=200){
+                                val message = "Не удалось совершить продажу"
+                                val duration = Toast.LENGTH_LONG // или Toast.LENGTH_LONG
+                                val toast = Toast.makeText(applicationContext, message, duration)
+                                toast.show()
+                            }
+                        };
+                    }
+                    override fun onFailure(call: Call<ResponseSell>, t: Throwable) {
+                        Log.i("MyLog", t.stackTraceToString())
+                        val message = "Не удалось совершить продажу, пожалуйста, попробуйте позже"
+                        val duration = Toast.LENGTH_LONG // или Toast.LENGTH_LONG
+                        val toast = Toast.makeText(applicationContext, message, duration)
+                        toast.show()
+                    }
+                }
+            )
+        }
+
+        builder.setNegativeButton("Отмена") { dialog, which ->
+            dialog.cancel()
+        }
+
+        val dialog = builder.create()
+        dialog.show()
+    }
 }

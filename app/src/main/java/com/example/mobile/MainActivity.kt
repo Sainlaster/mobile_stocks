@@ -13,7 +13,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         bindingC=ActivityMainBinding.inflate(layoutInflater)
         setContentView(bindingC.root)
-        //UserVariables.token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjUyOTkwMDc0NjAsInVzZXJfaWQiOiJmZjBiZjA1MS0wMzJhLTQ1YzktYjkyNy1iZTNjNGZmNmVkZDkifQ.2v4IFjACvDA4m9cgshEyDTgkHQS9M4ZVRrMKZQwAX0I"
         if(UserVariables.token=="") {
             var intent = Intent(this, SignOrRegistr::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -24,10 +23,9 @@ class MainActivity : AppCompatActivity() {
             when (it.itemId ){
                 R.id.quotes->{supportFragmentManager.beginTransaction().replace(R.id.fragmentPlace,StockFragment()).commit()}
                 R.id.portfolio->{supportFragmentManager.beginTransaction().replace(R.id.fragmentPlace,PortfolioFragment()).commit()}
+                R.id.setting->{supportFragmentManager.beginTransaction().replace(R.id.fragmentPlace,InfoFragment()).commit()}
             }
             true
         }
-    }
-    fun OnNavButtonClick(){
     }
 }

@@ -9,10 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.mobile.api.StockService
-import com.example.mobile.databinding.ActivityMainBinding
+import coil.decode.SvgDecoder
 import com.example.mobile.databinding.FragmentStockBinding
 import com.example.mobile.model.ResponseStockDto
 import com.example.mobile.repository.StockServiceRepository
@@ -20,8 +18,6 @@ import com.example.mobile.uservariables.UserVariables
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class StockFragment : Fragment(), StockAdapter.Listener {
     private val stockServiceRepository: StockServiceRepository = StockServiceRepository()
@@ -69,14 +65,15 @@ class StockFragment : Fragment(), StockAdapter.Listener {
                                 val stock =
                                     Stock(
                                         item.id,
-                                        R.drawable.baseline_analytics_24,
+                                        item.logo,
                                         item.price,
-                                        "123",
+                                        "NASDAQ",
                                         item.name,
                                         item.ticket,
-                                        "asd",
-                                        "sad"
+                                        "0",
+                                        "0"
                                     )
+
                                 if(i>=2)
                                 adapter.addStock(stock)
                                 else
