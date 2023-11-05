@@ -27,6 +27,7 @@
         android:layout_marginTop="21dp"
         android:ems="10"
         android:inputType="textPassword"
+        android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView7" />
@@ -38,6 +39,7 @@
         android:layout_marginTop="21dp"
         android:ems="10"
         android:inputType="text"
+        android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView5" />
@@ -61,6 +63,7 @@
         android:layout_marginTop="21dp"
         android:ems="10"
         android:inputType="text"
+        android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView6" />

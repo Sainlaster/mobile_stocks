@@ -3,9 +3,12 @@ package com.example.mobile.repository
 import com.example.mobile.api.BuyStockService
 import com.example.mobile.api.RegisterService
 import com.example.mobile.api.RetrofitInterface
+import com.example.mobile.api.SellStockService
 import com.example.mobile.api.SignInService
 import com.example.mobile.model.ResponsUserInfo
 import com.example.mobile.model.ResponseBuy
+import com.example.mobile.model.ResponsePolynom
+import com.example.mobile.model.ResponseSell
 import com.example.mobile.model.ResponseStockDto
 import com.example.mobile.model.ResponserRegister
 import com.example.mobile.model.SignInToken
@@ -29,10 +32,17 @@ class StockServiceRepository {
     fun postBuyStock(token: String, amount: Int, ticket:String):Call <ResponseBuy>{
         return RetrofitInterface.stockBuy.buyStock(token,BuyStockService.BuyRequestBody(amount,ticket))
     }
+    fun deleteSellStock(token: String, amount: Int, ticket:String):Call <ResponseSell>{
+        return RetrofitInterface.stockSell.sellStock(token,SellStockService.SellRequestBody(amount,ticket))
+    }
     fun getUserInfo(token: String):Call <ResponsUserInfo>{
         return RetrofitInterface.userInfo.getUserInfo(token)
     }
     fun postRegisterUser(userName:String,login:String, password:String):Call <ResponserRegister>{
         return RetrofitInterface.registerUser.postRegister(RegisterService.RegisterRequestBody(userName,login,password))
+    }
+    fun getPolynomial(token: String):Call<ResponsePolynom>
+    {
+        return RetrofitInterface.polynomial.getPolynomial(token)
     }
 }
