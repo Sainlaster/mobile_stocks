@@ -7,7 +7,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.lang.reflect.Field
 object RetrofitInterface {
-    private const val BASE_URL = "http://94.19.208.77/api/v1/"
+    private const val BASE_URL = "http://mock-stock-service.ru/api/v1/"
     private val retrofit by lazy {
         val gson = GsonBuilder()
             .setLenient()
